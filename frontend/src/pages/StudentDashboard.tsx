@@ -43,7 +43,7 @@ export default function StudentDashboard({ onNavigate }: Props) {
     localStorage.removeItem('user');
     setUser(null);
     setShowProfileDropdown(false);
-    onNavigate('login');
+    onNavigate('landing');
   };
 
   const menuItems = [

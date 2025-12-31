@@ -83,7 +83,7 @@ export default function InstructorDashboard({ onNavigate }: Props) {
   const logout = () => {
     localStorage.removeItem('user');
     setShowProfileDropdown(false);
-    onNavigate('login');
+    onNavigate('landing');
   };
 
   // Stats calculations

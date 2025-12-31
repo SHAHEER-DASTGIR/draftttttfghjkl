@@ -67,7 +67,7 @@ export default function AdminDashboard({ onNavigate }: Props) {
 
   const logout = () => {
     localStorage.removeItem('user');
-    onNavigate('login');
+    onNavigate('landing');
   };
 
   // Stats calculations
