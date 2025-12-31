@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Components
 import Header from './components/Header';
@@ -21,10 +21,35 @@ import type { Page } from './types';
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('landing');
   const [user, setUser] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    const savedPage = localStorage.getItem('currentPage');
+
+    if (savedUser) {
+      try {
+        const parsedUser = JSON.parse(savedUser);
+        setUser(parsedUser);
+
+        if (savedPage) {
+          setCurrentPage(savedPage as Page);
+        } else {
+          const role = parsedUser.role;
+          if (role === 'student') setCurrentPage('studentDashboard');
+          else if (role === 'instructor') setCurrentPage('instructorDashboard');
+          else if (role === 'admin') setCurrentPage('adminDashboard');
+        }
+      } catch {
+        setCurrentPage('landing');
+      }
+    }
+    setIsLoading(false);
+  }, []);
 
   const handleNavigate = (page: Page) => {
     setCurrentPage(page);
-    // Optional: page change hone pe top pe scroll kar jaye
+    localStorage.setItem('currentPage', page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -59,9 +84,9 @@ function App() {
       {currentPage === 'instructor' && <Instructor onNavigate={handleNavigate} />}
       {currentPage === 'contact' && <Contact onNavigate={handleNavigate} />}
 
-      {currentPage === 'studentDashboard' && <StudentDashboard />}
-      {currentPage === 'instructorDashboard' && <InstructorDashboard />}
-      {currentPage === 'adminDashboard' && <AdminDashboard />}
+      {currentPage === 'studentDashboard' && <StudentDashboard onNavigate={handleNavigate} />}
+      {currentPage === 'instructorDashboard' && <InstructorDashboard onNavigate={handleNavigate} />}
+      {currentPage === 'adminDashboard' && <AdminDashboard onNavigate={handleNavigate} />}
 
       {/* FOOTER */}
       {!hideLayout && (
